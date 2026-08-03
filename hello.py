@@ -9,9 +9,22 @@
 
 # name = name.strip().title()
 
-name = input("what is your name?").strip().title()
+# name = input("what is your name?").strip().title()
 
 # split user's name inton first name and last name
 # first, last = name.split(" ")
 
-print(f"Hello, {name}")
+# print(f"Hello, {name}")
+
+
+
+def main():
+    name = input("What;s your name? ")
+    hello(name)
+
+
+def hello(to="world"):
+    print("hello,", to)
+
+
+main()

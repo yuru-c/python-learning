@@ -1,0 +1,19 @@
+[project]
+name = "python-learning"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "yuru-c", email = "shannon0137@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "cowsay>=6.1",
+]
+
+[project.scripts]
+python-learning = "python_learning:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"

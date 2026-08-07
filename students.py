@@ -40,8 +40,8 @@ with open("students.csv") as file:
 for student in sorted(students, key=lambda student: student["name"]):
     print(f"{student['name']} is from {student['home']}")"""
 
-import csv
-
+# CSV遇到value本身有,時
+'''import csv
 students = []
 with open("students.csv") as file:
     # CSV前面沒有name,home
@@ -54,4 +54,15 @@ with open("students.csv") as file:
         students.append({"name": row["name"], "home": row["home"]})
 
 for student in sorted(students, key=lambda student: student["name"]):
-    print(f"{student['name']} is from {student['home']}")
+    print(f"{student['name']} is from {student['home']}")'''
+
+import csv
+
+name = input("What's your name? ")
+home = input("Where's your home? ")
+
+with open("students.csv", "a", newline="") as file:
+    # writer = csv.writer(file)
+    # writer.writerow([name, home])
+    writer = csv.DictWriter(file, fieldnames=["name", "home"])
+    writer.writerow({"name": name, "home": home})

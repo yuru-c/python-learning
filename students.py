@@ -51,7 +51,8 @@ with open("students.csv") as file:
     # CSV前面有name,home CSV有很多values也可執行
     reader = csv.DictReader(file)
     for row in reader:
-        students.append({"name": row["name"], "home": row["home"]})
+        # students.append({"name": row["name"], "home": row["home"]})
+        students.append(row)
 
 for student in sorted(students, key=lambda student: student["name"]):
     print(f"{student['name']} is from {student['home']}")'''

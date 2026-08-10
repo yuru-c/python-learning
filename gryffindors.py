@@ -29,17 +29,22 @@ for gryffindor in sorted(gryffindors, key=lambda s: s["name"]):
     print(gryffindor["name"])'''
 
 
-
-students = ["Hermione", "Harry", "Ron"]
-
+# dictionary
+'''students = ["Hermione", "Harry", "Ron"]
 # gryffindors = []
-
 # for student in students:
 #     gryffindors.append({"name": student, "house": "Gryffindor"})
-
-
 # gryffindors = [{"name": student, "house": "Gryffindor"} for student in students]
+# gryffindors = {student: "Gryffindor" for student in students}
+# print(gryffindors)'''
 
-gryffindors = {student: "Gryffindor" for student in students}
 
-print(gryffindors)
+# enumerate
+students = ["Hermione", "Harry", "Ron"]
+
+'''for i in range(len(students)):
+    print(i + 1, students[i])'''
+
+for i, student in enumerate(students):
+    print(i + 1, student)
+

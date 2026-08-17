@@ -10,6 +10,7 @@ requires-python = ">=3.14"
 dependencies = [
     "cowsay>=6.1",
     "emoji>=2.15.0",
+    "fpdf2>=2.8.8",
     "inflect>=7.5.0",
     "pillow>=12.3.0",
     "pyfiglet>=1.0.4",

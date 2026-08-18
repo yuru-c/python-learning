@@ -12,6 +12,7 @@ dependencies = [
     "emoji>=2.15.0",
     "fpdf2>=2.8.8",
     "inflect>=7.5.0",
+    "numpy>=2.5.2",
     "pillow>=12.3.0",
     "pyfiglet>=1.0.4",
     "pytest>=9.1.1",
@@ -31,4 +32,9 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "mypy>=2.3.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "ml-training/numpy",
 ]

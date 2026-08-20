@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-'''data = {
+data = {
     "name": ["Alice", "Bob", "Charlie", "David"],
     "math": [85, 72, 95, np.nan],
     "english": [90, np.nan, 88, 75],
@@ -63,7 +63,7 @@ print(students)
 students["math"] = students["math"].astype(int)
 students["english"] = students["english"].astype(int)
 students["science"] = students["science"].astype(int)
-print(students.dtypes)'''
+print(students.dtypes)
 
 dirty_data = {
     "name" : ["Alice", "Bob", "Charlie", "Alice", "David", "Eve"],

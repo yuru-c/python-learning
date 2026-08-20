@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-data = {
+'''data = {
     "name": ["Alice", "Bob", "Charlie", "David"],
     "math": [85, 72, 95, np.nan],
     "english": [90, np.nan, 88, 75],
@@ -63,4 +63,35 @@ print(students)
 students["math"] = students["math"].astype(int)
 students["english"] = students["english"].astype(int)
 students["science"] = students["science"].astype(int)
-print(students.dtypes)
+print(students.dtypes)'''
+
+dirty_data = {
+    "name" : ["Alice", "Bob", "Charlie", "Alice", "David", "Eve"],
+    "math" : [85, 72, np.nan, 85, 91, 68],
+    "english" : [90, np.nan, 88, 90, 95, 70],
+    "science" : [78, 81, 92, 78, np.nan, 65]
+}
+
+dirty_students = pd.DataFrame(dirty_data)
+
+print("\n----- Dirty Data -----")
+print(dirty_students)
+print(dirty_students.isna().sum())
+print(dirty_students.duplicated())
+for column in ["math", "english", "science"]:
+    dirty_students[column] = dirty_students[column].fillna(
+        dirty_students[column].mean()
+    )
+print(dirty_students.drop_duplicates(subset=["name"]))
+for column in ["math", "english", "science"]:
+    dirty_students[column] = dirty_students[column].round().astype(int)
+
+dirty_students["average"] = dirty_students[
+    ["math", "english", "science"]
+].mean(axis=1)
+
+dirty_students = dirty_students.sort_values(
+    "average", ascending=False
+)
+print("\n----- Clean Data -----")
+print(dirty_students)

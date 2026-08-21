@@ -24,10 +24,17 @@ import matplotlib.pyplot as plt
 
 
 # bar chart
-subjects = ["Math", "English", "Science", "History", "Physics"]
-scores = [85, 78, 92, 70, 88]
-plt.bar(subjects, scores)
-plt.title("Student Scores")
-plt.xlabel("Subject")
-plt.ylabel("Score")
+# subjects = ["Math", "English", "Science", "History", "Physics"]
+# scores = [85, 78, 92, 70, 88]
+# plt.bar(subjects, scores)
+# plt.title("Student Scores")
+# plt.xlabel("Subject")
+# plt.ylabel("Score")
+# plt.show()
+
+
+# scatter plot散佈圖
+hours = [1, 2, 3, 4, 5, 6, 7, 8]
+scores = [52, 58, 65, 67, 72, 78, 84, 91]
+plt.scatter(hours, scores)
 plt.show()

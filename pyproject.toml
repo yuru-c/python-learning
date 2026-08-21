@@ -12,6 +12,7 @@ dependencies = [
     "emoji>=2.15.0",
     "fpdf2>=2.8.8",
     "inflect>=7.5.0",
+    "matplotlib>=3.11.1",
     "numpy>=2.5.2",
     "pandas>=3.0.5",
     "pillow>=12.3.0",

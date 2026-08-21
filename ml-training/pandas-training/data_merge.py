@@ -66,3 +66,22 @@ students_2 = pd.DataFrame({
 })
 
 print(pd.concat([students_1, students_2], ignore_index=True).fillna(0))
+
+
+
+students = pd.DataFrame({
+    "student_id": [1, 2, 3],
+    "name": ["Alice", "Bob", "Charlie"]
+})
+
+scores = pd.DataFrame({
+    "student_id": [1, 2, 3],
+    "math": [85, 72, 95],
+    "english": [90, 80, 88]
+})
+
+result = pd.merge(students, scores)
+print(result)
+result["average"] = result[["math", "english"]].mean(axis=1)
+print(result)
+print(result.loc[result["average"].idxmax(), "name"])

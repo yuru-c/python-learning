@@ -41,15 +41,34 @@ import matplotlib.pyplot as plt
 
 
 # Histogram 直方圖
-scores = [
-    52, 58, 61, 64, 65,
-    67, 68, 70, 72, 73,
-    74, 75, 76, 78, 80,
-    82, 84, 85, 87, 91
-]
-plt.hist(scores, bins=10)
-# 把整個資料範圍切成 10 個區間
-bin_edges = [50, 60, 70, 80, 90, 100]
-plt.hist(scores, bins=bin_edges)
-# 每 10 分一組 從 50 到 100
+# scores = [
+#     52, 58, 61, 64, 65,
+#     67, 68, 70, 72, 73,
+#     74, 75, 76, 78, 80,
+#     82, 84, 85, 87, 91
+# ]
+# plt.hist(scores, bins=10)
+# # 把整個資料範圍切成 10 個區間
+# bin_edges = [50, 60, 70, 80, 90, 100]
+# plt.hist(scores, bins=bin_edges)
+# # 每 10 分一組 從 50 到 100
+# plt.show()
+
+
+# subplots
+# bar chart / line chart
+subjects = ["Math", "English", "Science", "History", "Physics"]
+scores = [85, 78, 92, 70, 88]
+fig, (ax1, ax2) = plt.subplots(1, 2)
+# nrows=1, ncols=2
+ax1.bar(subjects, scores)
+ax1.set_title("Student Scores - Bar")
+ax1.set_xlabel("Subject")
+ax1.set_ylabel("Score")
+ax2.plot(subjects, scores)
+ax2.set_title("Student Scores - Line")
+ax2.set_xlabel("Subject")
+ax2.set_ylabel("Score")
+# 標題字擠在一起用tight_layout()
+plt.tight_layout()
 plt.show()

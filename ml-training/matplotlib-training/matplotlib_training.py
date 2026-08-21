@@ -110,6 +110,34 @@ import matplotlib.pyplot as plt
 # plt.show()
 
 
+# students = pd.DataFrame({
+#     "name": ["Alice", "Bob", "Charlie", "David", "Eva"],
+#     "math": [85, 72, 95, 68, 88],
+#     "english": [90, 80, 88, 75, 92],
+#     "science": [78, 81, 94, 70, 86]
+# })
+
+# names = ["Alice", "Bob", "Charlie", "David", "Eva"]
+
+# fig, (ax1, ax2) = plt.subplots(1, 2)
+# x = np.arange(len(names))
+# width = 0.2
+# ax1.bar(x - width, students["math"], width, label="Math")
+# ax1.bar(x, students["english"], width, label="English")
+# ax1.bar(x + width, students["science"], width, label="Science")
+# ax1.legend()
+# ax1.set_xticks(x)
+# ax1.set_xticklabels(names)
+
+# students["average"] = students[["math", "english", "science"]].mean(axis=1)
+# ax2.plot(students["name"], students["average"])
+
+# ax2.set_title("Mean")
+# plt.tight_layout()
+# plt.show()
+
+
+
 students = pd.DataFrame({
     "name": ["Alice", "Bob", "Charlie", "David", "Eva"],
     "math": [85, 72, 95, 68, 88],
@@ -117,21 +145,31 @@ students = pd.DataFrame({
     "science": [78, 81, 94, 70, 86]
 })
 
-names = ["Alice", "Bob", "Charlie", "David", "Eva"]
+students["average"] = students[["math", "english", "science"]].mean(axis=1)
+print(students.loc[students["average"].idxmax(), "name"])
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
-x = np.arange(len(names))
+x = np.arange(len(students["name"]))
 width = 0.2
 ax1.bar(x - width, students["math"], width, label="Math")
 ax1.bar(x, students["english"], width, label="English")
 ax1.bar(x + width, students["science"], width, label="Science")
-ax1.legend()
 ax1.set_xticks(x)
-ax1.set_xticklabels(names)
+ax1.set_xticklabels(students["name"])
+ax1.legend()
+ax1.set_title("Student Scores")
 
-students["average"] = students[["math", "english", "science"]].mean(axis=1)
-ax2.plot(students["name"], students["average"])
+ax2.plot(students["name"], students["average"], marker=".")
+for _, row in students.iterrows():
+    ax2.annotate(
+        f"{row.average:.2f}",
+        (row.name, row.average),
+        xytext=(5, 3),
+        textcoords="offset points"
+    )
+ax2.set_title("Average Score")
+ax2.set_xlabel("Student")
+ax2.set_ylabel("Average")
 
-ax2.set_title("Mean")
 plt.tight_layout()
 plt.show()

@@ -34,7 +34,22 @@ import matplotlib.pyplot as plt
 
 
 # scatter plot散佈圖
-hours = [1, 2, 3, 4, 5, 6, 7, 8]
-scores = [52, 58, 65, 67, 72, 78, 84, 91]
-plt.scatter(hours, scores)
+# hours = [1, 2, 3, 4, 5, 6, 7, 8]
+# scores = [52, 58, 65, 67, 72, 78, 84, 91]
+# plt.scatter(hours, scores)
+# plt.show()
+
+
+# Histogram 直方圖
+scores = [
+    52, 58, 61, 64, 65,
+    67, 68, 70, 72, 73,
+    74, 75, 76, 78, 80,
+    82, 84, 85, 87, 91
+]
+plt.hist(scores, bins=10)
+# 把整個資料範圍切成 10 個區間
+bin_edges = [50, 60, 70, 80, 90, 100]
+plt.hist(scores, bins=bin_edges)
+# 每 10 分一組 從 50 到 100
 plt.show()

@@ -1,0 +1,70 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+# from sklearn.metrics import (
+#     max_error, mean_absolute_error, mean_squared_error, r2_score
+# )
+
+'''data = {
+    "hours": [1, 2, 3, 4, 5, 6, 7, 8],
+    "score": [52, 58, 65, 71, 78, 84, 90, 95]
+}
+
+df = pd.DataFrame(data)
+x = df[["hours"]]
+y = df["score"]
+
+x_train, x_test, y_train, y_test = train_test_split(
+    x,y,
+    test_size=0.2, 
+    random_state=42
+)
+
+model = LinearRegression(fit_intercept=True)
+model.fit(x_train, y_train)
+y_pred = model.predict(x_test)
+print(y_test)
+print(y_pred)
+
+# residual = y_test - y_pred
+# print(residual)
+
+df["residual"] = y - model.predict(x)
+# Residual > 0 → Actual > Predicted → 模型低估
+# Residual < 0 → Actual < Predicted → 模型高估
+print(df)
+# print(x)
+# print(model.coef_)
+# print(model.intercept_)
+# print(model.predict(x))
+
+plt.scatter(x, df["residual"])
+plt.axhline(0)
+# 畫出 Residual = 0 的水平線
+plt.show()
+# 殘差在 0 附近隨機分布 沒有很明顯的曲線 => Linear Regression 很適合描述這組簡單資料
+# 如果殘差有明顯規律 模型可能還沒有抓到資料中的某些模式'''
+
+data2 = {
+    "x": [1, 2, 3, 4, 5, 6, 7, 8],
+    "y": [2, 4, 9, 16, 25, 36, 49, 64]
+}
+
+df2 = pd.DataFrame(data2)
+x2 = df2[["x"]]
+y2 = df2["y"]
+x2_train, x2_test, y2_train, y2_test = train_test_split(
+    x2, y2, 
+    test_size=0.2,
+    random_state=42
+)
+
+# Polynomial Regression y=ax²+bx+c
+model = LinearRegression(fit_intercept=True)
+model.fit(x2_train, y2_train)
+df2["residual2"] = y2 - model.predict(x2)
+print(df2["residual2"])
+plt.scatter(x2, df2["residual2"])
+plt.axhline(0)
+plt.show()

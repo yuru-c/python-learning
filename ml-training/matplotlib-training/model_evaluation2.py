@@ -2,9 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-# from sklearn.metrics import (
-#     max_error, mean_absolute_error, mean_squared_error, r2_score
-# )
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.metrics import (
+    max_error, mean_absolute_error, mean_squared_error, r2_score
+)
 
 '''data = {
     "hours": [1, 2, 3, 4, 5, 6, 7, 8],
@@ -60,11 +61,39 @@ x2_train, x2_test, y2_train, y2_test = train_test_split(
     random_state=42
 )
 
-# Polynomial Regression y=ax²+bx+c
+
 model = LinearRegression(fit_intercept=True)
 model.fit(x2_train, y2_train)
-df2["residual2"] = y2 - model.predict(x2)
-print(df2["residual2"])
-plt.scatter(x2, df2["residual2"])
+# df2["residual2"] = y2 - model.predict(x2)
+# print(df2["residual2"])
+# plt.scatter(x2, df2["residual2"])
+# plt.axhline(0)
+# plt.show()
+y2_pred_linear = model.predict(x2)
+r2_linear = r2_score(y2, y2_pred_linear)
+print(r2_linear)
+
+
+# Polynomial Regression y=ax²+bx+c
+poly = PolynomialFeatures(degree=2)
+x_poly = poly.fit_transform(x2)
+# print(x_poly)
+model_poly = LinearRegression()
+model_poly.fit(x_poly, y2)
+# print("Intercept:", model_poly.intercept_)
+# print("Coefficients:", model_poly.coef_)
+
+y2_pred_poly = model_poly.predict(x_poly)
+
+df2["residual_poly"] = y2 - y2_pred_poly
+
+r2_poly = r2_score(y2, y2_pred_poly)
+print(r2_poly)
+
+plt.scatter(x2, df2["residual_poly"])
 plt.axhline(0)
 plt.show()
+
+
+
+

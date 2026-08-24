@@ -140,17 +140,35 @@ x2_train, x2_test, y2_train, y2_test = train_test_split(
 # print(scores)
 
 
-model_poly_cv = Pipeline([
-    ("poly", PolynomialFeatures(degree=2)),
+# pipeline2
+# model_poly_cv = Pipeline([
+#     ("poly", PolynomialFeatures(degree=2)),
+#     ("linear", LinearRegression())
+# ])
+# scores_poly = cross_val_score(
+#     model_poly_cv,
+#     x2,
+#     y2,
+#     cv=4,
+#     scoring="r2"
+# )
+# print(scores_poly)
+# mean_scores = scores_poly.mean()
+# print(mean_scores)
+
+
+# pipeline3
+model_poly3_cv = Pipeline([
+    ("poly", PolynomialFeatures(degree=3)),
     ("linear", LinearRegression())
 ])
-scores_poly = cross_val_score(
-    model_poly_cv,
+scores_poly3 = cross_val_score(
+    model_poly3_cv,
     x2,
     y2,
     cv=4,
     scoring="r2"
 )
-print(scores_poly)
-mean_score = scores_poly.mean()
-print(mean_score)
+print(scores_poly3)
+mean_scores_poly3 = scores_poly3.mean()
+print(mean_scores_poly3)

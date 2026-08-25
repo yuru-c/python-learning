@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.pipeline import Pipeline
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, root_mean_squared_error
 
 data = {
@@ -49,22 +50,30 @@ print("R²:", r2)
 
 print(x.describe())
 
-scaler = StandardScaler()
-scaler.fit(x_train)
-print("Mean:", scaler.mean_)
-print("Scale:", scaler.scale_)
-# z=(x-μ)/σ  μ = mean_ σ = scale_
-x_train_scaled = scaler.transform(x_train)
-# x_train_scaled = scaler.fit_transform(x_train)
-print(x_train_scaled)
-# hours 比平均值低約 1.56 個標準差 / sleep 比平均值高約 0.89 個標準差 / practice 比平均值低約 1.51 個標準差
-# scaler.fit(x_test)不能寫 會讓 Test Data 的資訊跑進 preprocessing 破壞測試
-# Training 和 Test 要使用相同標準
-x_test_scaled = scaler.transform(x_test)
+# scaler = StandardScaler()
+# scaler.fit(x_train)
+# print("Mean:", scaler.mean_)
+# print("Scale:", scaler.scale_)
+# # z=(x-μ)/σ  μ = mean_ σ = scale_
+# x_train_scaled = scaler.transform(x_train)
+# # x_train_scaled = scaler.fit_transform(x_train)
+# print(x_train_scaled)
+# # hours 比平均值低約 1.56 個標準差 / sleep 比平均值高約 0.89 個標準差 / practice 比平均值低約 1.51 個標準差
+# # scaler.fit(x_test)不能寫 會讓 Test Data 的資訊跑進 preprocessing 破壞測試
+# # Training 和 Test 要使用相同標準
 # x_test_scaled = scaler.transform(x_test)
-print(x_test_scaled)
+# # x_test_scaled = scaler.transform(x_test)
+# print(x_test_scaled)
 
-model_scaled = LinearRegression()
-model_scaled.fit(x_train_scaled, y_train)
-y_pred_scaled = model_scaled.predict(x_test_scaled)
-print(y_pred_scaled)
+# model_scaled = LinearRegression()
+# model_scaled.fit(x_train_scaled, y_train)
+# y_pred_scaled = model_scaled.predict(x_test_scaled)
+# print(y_pred_scaled)
+
+model_pipeline = Pipeline([
+    ("scaler", StandardScaler()),
+    ("linear", LinearRegression())
+])
+model_pipeline.fit(x_train, y_train)
+y_pred_pipeline = model_pipeline.predict(x_test)
+print(y_pred_pipeline)

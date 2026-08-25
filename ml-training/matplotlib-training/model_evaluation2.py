@@ -158,17 +158,55 @@ x2_train, x2_test, y2_train, y2_test = train_test_split(
 
 
 # pipeline3
-model_poly3_cv = Pipeline([
-    ("poly", PolynomialFeatures(degree=3)),
+# model_poly3_cv = Pipeline([
+#     ("poly", PolynomialFeatures(degree=3)),
+#     ("linear", LinearRegression())
+# ])
+# scores_poly3 = cross_val_score(
+#     model_poly3_cv,
+#     x2,
+#     y2,
+#     cv=4,
+#     scoring="r2"
+# )
+# print(scores_poly3)
+# mean_scores_poly3 = scores_poly3.mean()
+# print(mean_scores_poly3)
+
+
+# pipeline1-5
+best_degree = None
+best_score = -float("inf")
+# inf = infinity（無限大
+for degree in range(1, 6):
+    model_poly_cv = Pipeline([
+        ("poly", PolynomialFeatures(degree=degree)),
+        ("linear", LinearRegression())
+    ])
+    scores_poly = cross_val_score(
+        model_poly_cv,
+        x2,
+        y2,
+        cv=4,
+        scoring="r2"
+    )
+    mean_score = scores_poly.mean()
+    print("Degree:", degree)
+    print("Scores:", scores_poly)
+    print("Mean R²:", mean_score)
+    if mean_score > best_score:
+        best_score = mean_score
+        best_degree = degree
+
+print("Best degree:", best_degree)
+print("Best CV R²:", best_score)    
+
+final_model = Pipeline([
+    ("poly", PolynomialFeatures(degree=best_degree)),
     ("linear", LinearRegression())
 ])
-scores_poly3 = cross_val_score(
-    model_poly3_cv,
-    x2,
-    y2,
-    cv=4,
-    scoring="r2"
-)
-print(scores_poly3)
-mean_scores_poly3 = scores_poly3.mean()
-print(mean_scores_poly3)
+final_model.fit(x2, y2)
+y2_final_pred = final_model.predict(x2)
+print(y2_final_pred)
+final_r2 = r2_score(y2, y2_final_pred)
+print("Final R²:", final_r2)

@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.pipeline import Pipeline
@@ -13,42 +13,51 @@ data = {
 }
 
 df = pd.DataFrame(data)
-print(data)
+# print(data)
 
 x = df[["hours", "sleep", "practice"]]
 y = df["score"]
 
-print(x)
-print(y)
+# print(x)
+# print(y)
 
 x_train, x_test, y_train, y_test = train_test_split(
     x,y,
     test_size=0.2,
     random_state=42
 )
-print(x_train)
-print(x_test)
+# print(x_train)
+# print(x_test)
 
 model = LinearRegression()
 model.fit(x_train, y_train)
-print("Coefficients:", model.coef_)
-print("Intercept:", model.intercept_)
+# print("Coefficients:", model.coef_)
+# print("Intercept:", model.intercept_)
 
 y_pred = model.predict(x_test)
-print("Actual:")
-print(y_test)
-print("Predicted:")
-print(y_pred)
-mae = mean_absolute_error(y_test, y_pred)
-print("MAE:", mae)
-mse = mean_squared_error(y_test, y_pred)
-print("MSE:", mse)
-rmse = root_mean_squared_error(y_test, y_pred)
-print("RMSE:", rmse)
-r2 = r2_score(y_test, y_pred)
-print("R²:", r2)
+# print("Actual:")
+# print(y_test)
+# print("Predicted:")
+# print(y_pred)
+# mae = mean_absolute_error(y_test, y_pred)
+# print("MAE:", mae)
+# mse = mean_squared_error(y_test, y_pred)
+# print("MSE:", mse)
+# rmse = root_mean_squared_error(y_test, y_pred)
+# print("RMSE:", rmse)
+# r2 = r2_score(y_test, y_pred)
+# print("R²:", r2)
 
-print(x.describe())
+# print(x.describe())
+
+scores_linear = cross_val_score(
+    model,
+    x,
+    y,
+    cv=4,
+    scoring="r2"
+)
+print("Mean R²(Linear):", scores_linear.mean())
 
 # scaler = StandardScaler()
 # scaler.fit(x_train)
@@ -76,4 +85,16 @@ model_pipeline = Pipeline([
 ])
 model_pipeline.fit(x_train, y_train)
 y_pred_pipeline = model_pipeline.predict(x_test)
-print(y_pred_pipeline)
+# print(y_pred_pipeline)
+
+scores = cross_val_score(
+    model_pipeline,
+    x,
+    y,
+    cv=4,
+    scoring="r2"
+)
+# print(scores)
+print("Mean R²(Scaler+Linear):", scores.mean())
+# 對普通 Linear Regression，StandardScaler 通常不會改變模型的預測能力
+# StandardScaler 會影響 KNN / SVM / K-Means / Neural Network

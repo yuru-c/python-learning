@@ -52,25 +52,38 @@ print("Predicted:")
 print(y_pred_knn_standard)
 
 
+# MinMaxScaler + KNN
+model_knn_minmax = Pipeline([
+    ("scaler", MinMaxScaler()),
+    ("knn", KNeighborsRegressor(n_neighbors=3))
+])
+model_knn_minmax.fit(x_train, y_train)
+y_pred_knn_minmax = model_knn_minmax.predict(x_test)
+print("Actual:")
+print(y_test)
+print("Predicted:")
+print(y_pred_knn_standard)
+
+
 # KNN評估
-mae_knn = mean_absolute_error(y_test, y_pred_knn)
-mse_knn = mean_squared_error(y_test, y_pred_knn)
-rmse_knn = np.sqrt(mse_knn)
-r2_knn = r2_score(y_test, y_pred_knn)
-print("KNN")
-print("MAE:", mae_knn)
-print("MSE:", mse_knn)
-print("RMSE:", rmse_knn)
-print("R²:", r2_knn)
-mae_knn_standard = mean_absolute_error(y_test, y_pred_knn_standard)
-mse_knn_standard = mean_squared_error(y_test, y_pred_knn_standard)
-rmse_knn_standard = np.sqrt(mse_knn_standard)
-r2_knn_standard = r2_score(y_test, y_pred_knn_standard)
-print("\nStandardScaler + KNN")
-print("MAE:", mae_knn_standard)
-print("MSE:", mse_knn_standard)
-print("RMSE:", rmse_knn_standard)
-print("R²:", r2_knn_standard)
+# mae_knn = mean_absolute_error(y_test, y_pred_knn)
+# mse_knn = mean_squared_error(y_test, y_pred_knn)
+# rmse_knn = np.sqrt(mse_knn)
+# r2_knn = r2_score(y_test, y_pred_knn)
+# print("KNN")
+# print("MAE:", mae_knn)
+# print("MSE:", mse_knn)
+# print("RMSE:", rmse_knn)
+# print("R²:", r2_knn)
+# mae_knn_standard = mean_absolute_error(y_test, y_pred_knn_standard)
+# mse_knn_standard = mean_squared_error(y_test, y_pred_knn_standard)
+# rmse_knn_standard = np.sqrt(mse_knn_standard)
+# r2_knn_standard = r2_score(y_test, y_pred_knn_standard)
+# print("\nStandardScaler + KNN")
+# print("MAE:", mae_knn_standard)
+# print("MSE:", mse_knn_standard)
+# print("RMSE:", rmse_knn_standard)
+# print("R²:", r2_knn_standard)
 
 scores_knn = cross_val_score(
     model_knn, x, y, cv=4, scoring="r2"
@@ -78,10 +91,16 @@ scores_knn = cross_val_score(
 scores_knn_standard = cross_val_score(
     model_knn_standard, x, y, cv=4, scoring="r2"
 )
+scores_knn_minmax = cross_val_score(
+    model_knn_minmax, x, y, cv=4, scoring="r2"
+)
 print("KNN:", scores_knn)
 print("Mean KNN:", scores_knn.mean())
 print("StandardScaler + KNN:", scores_knn_standard)
 print("Mean StandardScaler + KNN:", scores_knn_standard.mean())
+print("MinMaxScaler + KNN:", scores_knn_minmax)
+print("Mean MinMaxScaler + KNN:", scores_knn_minmax.mean())
+
 
 best_k = None
 best_score_k = -float("inf")
@@ -119,3 +138,40 @@ for k in range(1,6):
         best_k_standard = k
 print("Best K StandardScaler:", best_k_standard)
 print("Best CV R² StandardScaler:", best_score_standard)
+
+best_k_minmax = None
+best_score_minmax = -float("inf")
+for k in range(1,6):
+    model_knn_minmax_k = Pipeline([
+        ("scaler", MinMaxScaler()),
+        ("knn", KNeighborsRegressor(n_neighbors=k))
+    ])    
+    scores_knn_minmax_k = cross_val_score(
+        model_knn_minmax_k, x, y, cv=4, scoring="r2"
+    )
+    mean_score = scores_knn_minmax_k.mean()
+    print("K:", k)
+    print("Scores:", scores_knn_minmax_k)
+    print("Mean R²:", mean_score)
+    if mean_score > best_score_minmax:
+        best_score_minmax = mean_score
+        best_k_minmax = k
+print("Best K MinMaxScaler:", best_k_minmax)
+print("Best CV R² MinMaxScaler:", best_score_minmax)
+
+
+final_knn = KNeighborsRegressor(n_neighbors=1)
+final_knn.fit(x_train, y_train)
+y_final_pred = final_knn.predict(x_test)
+print("Actual:")
+print(y_test)
+print("Predicted:")
+print(y_final_pred)
+final_mae = mean_absolute_error(y_test, y_final_pred)
+final_mse = mean_squared_error(y_test, y_final_pred)
+final_rmse = np.sqrt(final_mse)
+final_r2 = r2_score(y_test, y_final_pred)
+print("MAE:", final_mae)
+print("MSE:", final_mse)
+print("RMSE:", final_rmse)
+print("R²:", final_r2)

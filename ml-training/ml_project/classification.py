@@ -72,3 +72,16 @@ print(y_proba)
 # Probability:
 # [[0.00165566 -> fail 0.99834434 -> pass] -> pass機率超高
 #  [0.42581471 -> fail 0.57418529 -> pass]]
+
+y_proba = model_logistic.predict_proba(x_test)[:, 1]
+print("P(1):")
+print(y_proba)
+
+threshold = 0.7
+y_pred_threshold = (y_proba >= threshold).astype(int)
+print("Predicted:")
+print(y_pred_threshold)
+print("Accuracy:", accuracy_score(y_test, y_pred_threshold))
+print("Precision:", precision_score(y_test, y_pred_threshold))
+print("Recall:", recall_score(y_test, y_pred_threshold))
+print("F1:", f1_score(y_test, y_pred_threshold))

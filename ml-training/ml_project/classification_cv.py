@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score, StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 x = np.array([
     [1, 7],
@@ -101,3 +103,20 @@ knn_scores_auc = cross_val_score(
 print("KNN:")
 print("ROC-AUC Scores:", knn_scores_auc)
 print("Mean ROC-AUC:", knn_scores_auc.mean())
+
+logistic.fit(x, y)
+print("Coefficients:")
+print(logistic.coef_)
+print("Intercept:")
+print(logistic.intercept_)
+
+# P(1)=1/(1+e^{-z})
+
+logistic_standard = Pipeline([
+    ("scaler", StandardScaler()),
+    ("logistic", LogisticRegression())
+])
+logistic_standard.fit(x, y)
+print("Standardized Coefficients:")
+print(logistic_standard.named_steps["logistic"].coef_)
+# 在標準化後的尺度下，Feature 1 的 Logistic Regression 係數絕對值比 Feature 2 大很多，因此 Feature 1 對模型的決策影響較強

@@ -120,3 +120,19 @@ logistic_standard.fit(x, y)
 print("Standardized Coefficients:")
 print(logistic_standard.named_steps["logistic"].coef_)
 # 在標準化後的尺度下，Feature 1 的 Logistic Regression 係數絕對值比 Feature 2 大很多，因此 Feature 1 對模型的決策影響較強
+
+
+# z=b0+b1x1+b2x2
+# Odds=P(1)/P(0)=e^z
+# P(1)=1/(1+e^(-z))
+# log-odds=ln(Odds)
+# P=Odds/(1+Odds)
+
+feature_names = ["feature1", "feature2"]
+coefficients = logistic.coef_[0]
+for feature, coefficient in zip(feature_names, coefficients):
+    print(
+        feature,
+        "Coefficient:", coefficient,
+        "Importance:", abs(coefficient)
+    )

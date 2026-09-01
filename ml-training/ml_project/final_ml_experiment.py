@@ -4,6 +4,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+)
 
 df = pd.read_csv("student_data.csv")
 
@@ -68,3 +71,18 @@ print("KNN:")
 print("Accuracy:", knn_scores.mean())
 print("F1:", knn_f1.mean())
 print("ROC-AUC:", knn_auc.mean())
+
+best_model = logistic
+best_model.fit(x_train, y_train)
+y_pred = best_model.predict(x_test)
+print("Actual:")
+print(y_test)
+print("Predicted:")
+print(y_pred)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Precision:", precision_score(y_test, y_pred))
+print("Recall:", recall_score(y_test, y_pred))
+print("F1:", f1_score(y_test, y_pred))
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))

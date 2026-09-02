@@ -238,3 +238,21 @@ plt.ylabel("True Positive Rate")
 plt.title("ROC Curve")
 plt.legend()
 plt.show()
+
+feature_names = (final_model.named_steps["preprocessor"].get_feature_names_out())
+# 從 Pipeline 裡找到 preprocessing，告訴我資料經過轉換後有哪些 feature
+
+coefficients = final_model.named_steps["model"].coef_[0]
+# 從 Pipeline 裡找到 Logistic Regression，把它學到的每個 feature 的 coefficient 拿出來
+
+feature_importance = pd.DataFrame({
+    "feature": feature_names,
+    "coefficient": coefficients,
+    "importance": abs(coefficients)
+})
+feature_importance = feature_importance.sort_values(
+    "importance",
+    ascending=False
+)
+print("\n===== Feature Importance =====")
+print(feature_importance.head(15))

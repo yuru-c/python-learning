@@ -9,7 +9,9 @@ from sklearn.model_selection import (
     train_test_split, StratifiedKFold, cross_val_score, GridSearchCV
 )
 from sklearn.dummy import DummyClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score
+)
 
 df = pd.read_csv("data/student-mat.csv", sep=";")
 
@@ -192,3 +194,13 @@ print("\nFinal Model:")
 print("Logistic Regression")
 print("\nFinal Predictions:")
 print(final_pred)
+
+accuracy = accuracy_score(y_test, final_pred)
+precision = precision_score(y_test, final_pred)
+recall = recall_score(y_test, final_pred)
+f1 = f1_score(y_test, final_pred)
+print("\n===== Final Model Evaluation =====")
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1:", f1)

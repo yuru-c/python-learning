@@ -256,3 +256,28 @@ feature_importance = feature_importance.sort_values(
 )
 print("\n===== Feature Importance =====")
 print(feature_importance.head(15))
+
+# Error Analysis
+errors = X_test.copy()
+errors["actual"] = y_test
+errors["predicted"] = final_pred
+errors = errors[errors["actual"] != errors["predicted"]]
+print("\n===== Error Analysis =====")
+print(errors)
+
+fp_errors = errors[(errors["actual"] == 0) & (errors["predicted"] == 1)]
+fn_errors = errors[(errors["actual"] == 1) & (errors["predicted"] == 0)]
+print("\n===== False Positives =====")
+print(fp_errors)
+print("\n===== False Negatives =====")
+print(fn_errors)
+important_columns = [
+    "G1",
+    "G2",
+    "age",
+    "Walc",
+    "famrel",
+    "failures"
+]
+print("\n===== Important Features of Errors =====")
+print(errors[important_columns + ["actual", "predicted"]])

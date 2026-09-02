@@ -5,7 +5,9 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import (
+    train_test_split, StratifiedKFold, cross_val_score, GridSearchCV
+)
 from sklearn.dummy import DummyClassifier
 from sklearn.metrics import accuracy_score
 
@@ -104,8 +106,89 @@ baseline = DummyClassifier(
 
 baseline.fit(X_train, y_train)
 baseline_pred = baseline.predict(X_test)
+
+
+# Train Logistic Regression
+logistic_model.fit(X_train, y_train)
+# Predict
+logistic_pred = logistic_model.predict(X_test)
+# Accuracy
+logistic_accuracy = accuracy_score(
+    y_test, logistic_pred
+)
+print("\nLogistic Regression Accuracy:")
+print(logistic_accuracy)
+
+# Train KNN
+knn_model.fit(X_train, y_train)
+# Predict
+knn_pred = knn_model.predict(X_test)
+# Accuracy
+knn_accuracy = accuracy_score(
+    y_test, knn_pred
+)
+print("\nKNN Accuracy:")
+print(knn_accuracy)
+
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
+logistic_cv_scores = cross_val_score(
+    logistic_model, X_train, y_train, cv=cv, scoring="accuracy"
+)
+print("\nLogistic Regression CV Accuracy:")
+print(logistic_cv_scores)
+print("Mean:", logistic_cv_scores.mean())
+
+knn_cv_scores = cross_val_score(
+    knn_model, X_train, y_train, cv=cv, scoring="accuracy"
+)
+print("\nKNN CV Accuracy:")
+print(knn_cv_scores)
+print("Mean:", knn_cv_scores.mean())
+
+param_grid = {
+    "model__n_neighbors": [3, 5, 7, 9]
+}
+
+grid_search = GridSearchCV(
+    knn_model, param_grid, cv=cv, scoring="accuracy"
+)
+
+grid_search.fit(X_train, y_train)
+print("\nBest K:")
+print(grid_search.best_params_)
+print("\nBest CV Accuracy:")
+print(grid_search.best_score_)
+best_knn = grid_search.best_estimator_
+
 baseline_accuracy = accuracy_score(
     y_test, baseline_pred
 )
-print("\nBaseline Accuracy:")
-print(baseline_accuracy)
+logistic_accuracy = accuracy_score(
+    y_test, logistic_pred
+)
+best_knn_pred = best_knn.predict(X_test)
+best_knn_accuracy = accuracy_score(
+    y_test, best_knn_pred
+)
+print("\n===== Model Comparison =====")
+print("Baseline:", baseline_accuracy)
+print("Logistic Regression:", logistic_accuracy)
+print("Best KNN:", best_knn_accuracy)
+print("\n===== CV Comparison =====")
+print(
+    "Logistic Regression CV Mean:",
+    logistic_cv_scores.mean()
+)
+print(
+    "Best KNN CV Mean:",
+    grid_search.best_score_
+)
+
+final_model = logistic_model
+final_model.fit(X_train, y_train)
+final_pred = final_model.predict(X_test)
+print("\nFinal Model:")
+print("Logistic Regression")
+print("\nFinal Predictions:")
+print(final_pred)

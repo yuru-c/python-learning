@@ -15,6 +15,9 @@ from sklearn.metrics import (
     roc_curve, roc_auc_score
 )
 
+# 1.Project Goal 能不能利用學生的背景資料與前期成績，預測學生最後是否會通過
+
+# 2.Dataset UCI Student Performance Dataset 的 student-mat.csv
 df = pd.read_csv("data/student-mat.csv", sep=";")
 
 # print("Shape:")
@@ -42,6 +45,7 @@ y = df["passed"]
 # Model B No G1/G2
 X_without_grades = df.drop(columns=["G1", "G2", "G3", "passed"])
 
+# 3.Data Preprocessing 資料裡面同時有數字和文字
 # print("Categorical columns:")
 # print(X_with_grades.select_dtypes(include="object").columns.tolist())
 
@@ -74,6 +78,7 @@ preprocessor = ColumnTransformer(
     ]
 )
 
+# 4.Models
 # Logistic Regression pipeline
 logistic_model = Pipeline([
     ("preprocessor", preprocessor),
@@ -189,6 +194,8 @@ print(
     grid_search.best_score_
 )
 
+# 5.Final Model
+# 6.Final Evaluation
 final_model = logistic_model
 final_model.fit(X_train, y_train)
 final_pred = final_model.predict(X_test)
@@ -207,6 +214,7 @@ print("Precision:", precision)
 print("Recall:", recall)
 print("F1:", f1)
 
+# 7.Confusion Matrix
 cm = confusion_matrix(y_test, final_pred)
 print("\n===== Confusion Matrix =====")
 print(cm)
@@ -226,6 +234,7 @@ print(tpr)
 print("Thresholds:")
 print(thresholds)
 
+# 8.ROC-AUC
 auc = roc_auc_score(y_test, final_proba)
 print("\nROC-AUC:")
 print(auc)
@@ -239,6 +248,7 @@ plt.title("ROC Curve")
 plt.legend()
 plt.show()
 
+# 9.Feature Importance
 feature_names = (final_model.named_steps["preprocessor"].get_feature_names_out())
 # 從 Pipeline 裡找到 preprocessing，告訴我資料經過轉換後有哪些 feature
 
@@ -257,7 +267,7 @@ feature_importance = feature_importance.sort_values(
 print("\n===== Feature Importance =====")
 print(feature_importance.head(15))
 
-# Error Analysis
+# 10.Error Analysis
 errors = X_test.copy()
 errors["actual"] = y_test
 errors["predicted"] = final_pred
@@ -281,3 +291,8 @@ important_columns = [
 ]
 print("\n===== Important Features of Errors =====")
 print(errors[important_columns + ["actual", "predicted"]])
+
+# 11.Project Limitations ①Dataset不大 ②Dataset有特定背景 ③我們使用了G1/G2(已經知道前期成績後，預測最後是否通過)
+
+# 12.Project Conclusion
+"""我們使用 UCI Student Performance Dataset 建立學生最終通過與否的二元分類模型。經過資料探索、Target Engineering、One-Hot Encoding、Scaling、Pipeline、Train/Test Split、Cross-Validation 與 Hyperparameter Tuning 後，比較 Baseline、Logistic Regression 與 KNN。最終選擇 Logistic Regression 作為 Final Model，於測試集得到 84.81% Accuracy、93.62% Precision、83.02% Recall、88.00% F1，以及 93.47% ROC-AUC。Feature analysis 顯示 G1 與 G2 是模型中最具影響力的特徵，而 Error Analysis 顯示模型主要錯誤來自 False Negative。整體而言，Logistic Regression 在此 Dataset 上展現良好的分類能力，但由於資料量、資料來源與測試集規模有限，結果不應直接視為模型在其他學生群體上的泛化表現。"""

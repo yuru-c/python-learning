@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -10,7 +11,8 @@ from sklearn.model_selection import (
 )
 from sklearn.dummy import DummyClassifier
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score
+    accuracy_score, precision_score, recall_score, f1_score, confusion_matrix,
+    roc_curve, roc_auc_score
 )
 
 df = pd.read_csv("data/student-mat.csv", sep=";")
@@ -204,3 +206,35 @@ print("Accuracy:", accuracy)
 print("Precision:", precision)
 print("Recall:", recall)
 print("F1:", f1)
+
+cm = confusion_matrix(y_test, final_pred)
+print("\n===== Confusion Matrix =====")
+print(cm)
+
+final_proba = final_model.predict_proba(X_test)[:, 1]
+print("\n===== Predicted Probabilities =====")
+print(final_proba)
+
+fpr, tpr, thresholds = roc_curve(y_test, final_proba) 
+print("\n===== ROC Data =====")
+# 實際是 0 的人，有多少被錯誤預測成 1
+print("FPR:")
+print(fpr)
+# 實際是 1 的人，有多少成功被預測成 1 =Recall
+print("TPR:")
+print(tpr)
+print("Thresholds:")
+print(thresholds)
+
+auc = roc_auc_score(y_test, final_proba)
+print("\nROC-AUC:")
+print(auc)
+
+plt.figure(figsize=(6, 6))
+plt.plot(fpr, tpr, label=f"Logistic Regression (AUC = {auc:.3f})")
+plt.plot([0, 1], [0, 1], linestyle="--", label="Random")
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.title("ROC Curve")
+plt.legend()
+plt.show()
